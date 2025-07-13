@@ -1,0 +1,13 @@
+name: athletes_pipeline
+
+env_manager: local
+
+entry_points:
+  main:
+    parameters:
+      lr: {type: float, default: 0.05}
+      n_estimators: {type: int, default: 100}
+    command: >
+      python src/ingest.py &&
+      python src/train.py --lr {lr} --n_estimators {n_estimators} &&
+      python src/eval.py

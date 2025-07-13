@@ -1,0 +1,13 @@
+prefix=/Users/ashley/projects/athletes-pipeline/env311
+exec_prefix=/Users/ashley/projects/athletes-pipeline/env311
+libdir=/Users/ashley/projects/athletes-pipeline/env311/lib
+sharedlibdir=/Users/ashley/projects/athletes-pipeline/env311/lib
+includedir=/Users/ashley/projects/athletes-pipeline/env311/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

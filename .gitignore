@@ -3,3 +3,7 @@ mlflow/
 mlruns/
 artifacts/
 MLproject.save
+
+# Feast artifacts
+feature_repo/data/
+registry.db

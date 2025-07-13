@@ -2,3 +2,4 @@ env/
 mlflow/
 mlruns/
 artifacts/
+MLproject.save

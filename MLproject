@@ -1,13 +1,52 @@
 name: athletes_pipeline
-
 env_manager: local
 
 entry_points:
-  main:
+  ingest:
+    command: python src/ingest.py
+  
+  features:
+    command: python src/feature_engineering.py
+    
+  feast_apply:
+    command: cd feature_repo && feast apply && cd ..
+    
+  train:
     parameters:
-      lr: {type: float, default: 0.05}
+      feature_version: {type: string, default: "v1"}
       n_estimators: {type: int, default: 100}
+      max_depth: {type: int, default: 6}
+    command: python src/train.py --feature_version {feature_version} --n_estimators {n_estimators} --max_depth {max_depth}
+  
+  eval:
+    command: python src/eval.py
+    
+  full_pipeline:
     command: >
+      mkdir -p artifacts/carbon &&
+      mkdir -p artifacts/models &&
+      mkdir -p artifacts/plots &&
+      echo "Starting Athletes ML Pipeline..." &&
+      echo "Step 1: Data Ingestion" &&
       python src/ingest.py &&
-      python src/train.py --lr {lr} --n_estimators {n_estimators} &&
-      python src/eval.py
+      echo "Step 2: Feature Engineering" &&
+      python src/feature_engineering.py &&
+      echo "Step 3: Feature Store Update" &&
+      cd feature_repo && feast apply && cd .. &&
+      echo "Step 4: Model Training (4 separate experiments)" &&
+      mlflow run . -e train -P feature_version=v1 -P n_estimators=100 -P max_depth=6 &&
+      mlflow run . -e train -P feature_version=v1 -P n_estimators=200 -P max_depth=10 &&
+      mlflow run . -e train -P feature_version=v2 -P n_estimators=100 -P max_depth=6 &&
+      mlflow run . -e train -P feature_version=v2 -P n_estimators=200 -P max_depth=10 &&
+      echo "Step 5: Model Evaluation" &&
+      mlflow run . -e eval &&
+      echo "Pipeline completed successfully!"
+  
+  train_all:
+    command: >
+      echo "Running 4 separate training experiments..." &&
+      mlflow run . -e train -P feature_version=v1 -P n_estimators=100 -P max_depth=6 &&
+      mlflow run . -e train -P feature_version=v1 -P n_estimators=200 -P max_depth=10 &&
+      mlflow run . -e train -P feature_version=v2 -P n_estimators=100 -P max_depth=6 &&
+      mlflow run . -e train -P feature_version=v2 -P n_estimators=200 -P max_depth=10 &&
+      echo "All training completed!"

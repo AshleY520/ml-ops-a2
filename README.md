@@ -2,7 +2,7 @@
 
 *For reproducibility*
 
-#### Technology Stack
+*Technology Stack*
 
 - **MLflow 2.x** - Experiment tracking and model registry
 - **Feast** - Feature store and versioning
@@ -10,8 +10,7 @@
 - **scikit-learn** - Random Forest implementation
 - **Python 3.11.9** - Core development
 
-#### Code
-
+*Code*
 ```bash
 git clone ml-ops-a2
 cd athletes-pipeline

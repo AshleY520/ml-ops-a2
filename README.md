@@ -8,7 +8,7 @@
 - **Feast** - Feature store and versioning
 - **CodeCarbon** - Carbon footprint monitoring
 - **scikit-learn** - Random Forest implementation
-- **Python 3.11.9 - Core development
+- **Python 3.11.9** - Core development
 
 #### Code
 
